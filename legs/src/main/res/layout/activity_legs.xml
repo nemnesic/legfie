@@ -1,0 +1,131 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/img_photo"
+            android:layout_gravity="center_horizontal"
+            android:background="#52D017" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="#legfie"
+            android:id="@+id/hashtag"
+            android:layout_gravity="right|bottom"
+            android:singleLine="true"
+            android:textColor="#ffffff" />
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:showDividers="none"
+            android:padding="0dp"
+            android:background="@drawable/buttonback">
+
+
+            <ImageButton
+                android:id="@+id/legs1"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop"
+                android:focusableInTouchMode="false" />
+
+            <ImageButton
+                android:id="@+id/legs2"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs3"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs4"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs5"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs6"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs19"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs7"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs8"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs9"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs10"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/legs11"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/legs1"
+                android:scaleType="centerCrop" />
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>
