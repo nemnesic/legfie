@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.Menu;
@@ -21,7 +19,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,15 +47,10 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
+    TextView hashtag;
     private CharSequence mTitle;
     private Uri fileUri; // file url to store image/video
-
-    TextView hashtag;
-
-    private String generateFileName() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        return "legfie-" + timeStamp + ".png";
-    }
+    private Menu topBarMenu;
 
     private static File getOutputMediaFile(boolean isPublic) {
         // External sdcard location
@@ -83,11 +75,19 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
 
     }
 
+    private String generateFileName() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        return "legfie-" + timeStamp + ".png";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_legs);
+
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+       // getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
 
         hashtag = (TextView) findViewById(R.id.hashtag);
         hashtag.setVisibility(View.GONE);
@@ -313,19 +313,23 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
 */
         if (item.getItemId() == R.id.action_camera) {
             captureImage();
-        }
-
-        if (item.getItemId() == R.id.action_save) {
+        } else if (item.getItemId() == R.id.action_save) {
             saveImage();
+        } else if (item.getItemId() == R.id.action_settings) {
+            openSettingsActivity();
         }
 
         return false;
     }
 
+    private void openSettingsActivity() {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        topBarMenu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.legs, menu);
         return true;

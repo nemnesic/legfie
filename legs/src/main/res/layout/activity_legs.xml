@@ -24,7 +24,10 @@
             android:id="@+id/hashtag"
             android:layout_gravity="right|bottom"
             android:singleLine="true"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:shadowColor="#aeae8c" />
     </FrameLayout>
 
     <HorizontalScrollView
