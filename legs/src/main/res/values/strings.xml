@@ -5,8 +5,27 @@
     <string name="settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="app_id">1483158071907763</string>
+    <string name="fb_namespace">legfieapp</string>
+    <string name="inline_preferences">inline prefs</string>
+    <string name="title_checkbox_preference">chick prefs</string>
+    <string name="summary_checkbox_preference">summary pref</string>
+    <string name="dialog_based_preferences">dialog prefs</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
+    <string name="title_activity_quick_prefs">QuickPrefsActivity</string>
+    <string name="share">Share</string>
+    <string name="action_next">Next</string>
+
+    <!-- preferences -->
+    <string name="share_facebook_title">Share of Facebook</string>
+    <string name="share_twitter_title">Share of Twitter</string>
+    <string name="share_instagram_title">Share of Instagram</string>
+    <string name="share_facebook_summary">Share of Facebook summary</string>
+    <string name="share_twitter_summary">Share of Twitter summary</string>
+    <string name="share_instagram_summary">Share of Instagram summary</string>
+    <string name="prefs_web_page">Web test intent</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_share_photo">SharePhoto</string>
 
 </resources>

@@ -1,1 +1,3 @@
+include ':libs:simplefacebook'
+include ':libs:facebook'
 include ':legs'

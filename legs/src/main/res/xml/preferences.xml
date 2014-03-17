@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="share_facebook"
+        android:title="@string/share_facebook_title"
+        android:summary="@string/share_facebook_summary"
+        android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="share_twitter"
+        android:title="@string/share_twitter_title"
+        android:summary="@string/share_twitter_summary"
+        android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="share_instantgram"
+        android:title="@string/share_instagram_title"
+        android:summary="@string/share_instagram_summary"
+        android:defaultValue="false" />
+</PreferenceScreen>

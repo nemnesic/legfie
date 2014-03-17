@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +49,17 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-    TextView hashtag;
+    ImageView hashtag;
     private CharSequence mTitle;
     private Uri fileUri; // file url to store image/video
     private Menu topBarMenu;
+    private TextView watermarkTextView;
+    Bitmap finalImage = null;
+    MenuItem saveItemActionBar, cameraItemActionBar, settingsItemActionBar = null;
+
+    private ShareActionProvider mShareActionProvider;
+    Uri imageUri = null;
+
 
     private static File getOutputMediaFile(boolean isPublic) {
         // External sdcard location
@@ -86,11 +95,11 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         setContentView(R.layout.activity_legs);
 
         //getActionBar().setDisplayHomeAsUpEnabled(true);
-       // getActionBar().setHomeButtonEnabled(true);
+        // getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
 
-        hashtag = (TextView) findViewById(R.id.hashtag);
-        hashtag.setVisibility(View.GONE);
+        hashtag = (ImageView) findViewById(R.id.hashtag);
+
 
         dataList = new ArrayList<DrawerItem>();
         addListenerOnButton();
@@ -101,8 +110,15 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(LegsActivity.this, "ImageButton is clicked!", Toast.LENGTH_SHORT).show();
-                selectLegs(1);
+                selectLegs(R.drawable.legs1);
+            }
+        });
+
+        ImageButton imageButton1 = (ImageButton) findViewById(R.id.legs2);
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                selectLegs(R.drawable.legs2);
             }
         });
     }
@@ -160,8 +176,12 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
     public void selectLegs(int position) {
 
         FrameLayout mainFrame = (FrameLayout) findViewById(R.id.content_frame);
+        if (legsImageView != null) {
+            mainFrame.removeView(legsImageView);
+        }
+
         legsImageView = new ImageView(this);
-        legsImageView.setImageResource(R.drawable.legs1);
+        legsImageView.setImageResource(position);
         legsImageView.setScaleType(ImageView.ScaleType.MATRIX);
         mainFrame.addView(legsImageView);
         legsImageView.bringToFront();
@@ -170,16 +190,17 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         hashtag.setVisibility(View.VISIBLE);
         hashtag.bringToFront();
 
+        saveItemActionBar.setVisible(true);
+
     }
 
-    public void saveImage() {
+    public String saveImage() {
         File rootPath = new File(Environment.getExternalStorageDirectory(), IMAGE_DIRECTORY_NAME);
 
         if (!rootPath.exists()) {
             rootPath.mkdirs();
         }
 
-        Toast.makeText(this, rootPath.getPath(), Toast.LENGTH_LONG).show();
         File dataFile = new File(rootPath, generateFileName());
         Bitmap bm = null;
         FrameLayout savedImage = null;
@@ -191,9 +212,12 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         try {
             FileOutputStream out = new FileOutputStream(dataFile, false);
             bm.compress(Bitmap.CompressFormat.PNG, 95, out);
+            finalImage = bm;
+            imageUri = Uri.fromFile(dataFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return imageUri.toString();
     }
 
     @Override
@@ -245,31 +269,6 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         return true;
     }
 
-    private void dumpEvent(MotionEvent event) {
-        String names[] = {"DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE",
-                "POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?"};
-        StringBuilder sb = new StringBuilder();
-        int action = event.getAction();
-        int actionCode = action & MotionEvent.ACTION_MASK;
-        sb.append("event ACTION_").append(names[actionCode]);
-        if (actionCode == MotionEvent.ACTION_POINTER_DOWN
-                || actionCode == MotionEvent.ACTION_POINTER_UP) {
-            sb.append("(pid ").append(
-                    action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-            sb.append(")");
-        }
-        sb.append("[");
-        for (int i = 0; i < event.getPointerCount(); i++) {
-            sb.append("#").append(i);
-            sb.append("(pid ").append(event.getPointerId(i));
-            sb.append(")=").append((int) event.getX(i));
-            sb.append(",").append((int) event.getY(i));
-            if (i + 1 < event.getPointerCount())
-                sb.append(";");
-        }
-        sb.append("]");
-        Log.d(TAG, sb.toString());
-    }
 
     /**
      * Determine the space between the first two fingers
@@ -314,7 +313,9 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
         if (item.getItemId() == R.id.action_camera) {
             captureImage();
         } else if (item.getItemId() == R.id.action_save) {
-            saveImage();
+            AsyncTaskRunner runner = new AsyncTaskRunner();
+            runner.execute();
+
         } else if (item.getItemId() == R.id.action_settings) {
             openSettingsActivity();
         }
@@ -323,17 +324,72 @@ public class LegsActivity extends Activity implements View.OnTouchListener {
     }
 
     private void openSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 
+    private void openShareActivity() {
+        Intent intent = new Intent(this, SharePhoto.class);
+        intent.putExtra("IMAGE_URI", imageUri);
+        startActivity(intent);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         topBarMenu = menu;
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.legs, menu);
+        saveItemActionBar = menu.findItem(R.id.action_save);
+        cameraItemActionBar = menu.findItem(R.id.action_camera);
+        settingsItemActionBar = menu.findItem(R.id.action_settings);
+        //initializeShareAction(menu.findItem(R.id.action_share));
         return true;
     }
 
+
+    private class AsyncTaskRunner extends AsyncTask<String, String, String> {
+
+        private String resp;
+
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("saving image..."); // Calls onProgressUpdate()
+            return saveImage();
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
+        @Override
+        protected void onPostExecute(String result) {
+            File originalFile = new File(fileUri.getPath());
+            if (originalFile.exists()) {
+                originalFile.delete();
+            }
+            openShareActivity();
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPreExecute()
+         */
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(LegsActivity.this, "Saving your photo. Please wait...", Toast.LENGTH_LONG).show();
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onProgressUpdate(Progress[])
+         */
+        @Override
+        protected void onProgressUpdate(String... text) {
+            Log.d(TAG, "---------->" + text);
+        }
+    }
 }
 
